@@ -2,6 +2,9 @@
 #Sounds: https://jdwasabi.itch.io/8-bit-16-bit-sound-effects-pack
 
 import pygame
+from finish import Finish
+from coin import Coin
+from ground import Ground
 
 clock = pygame.time.Clock()
 pygame.init()
@@ -124,15 +127,6 @@ class Player(pygame.sprite.Sprite):
                 coins.remove(cn)
                 sprites.remove(cn)
 
-class Ground(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("images/ground.png")
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-
-
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y, jump_speed, gravity):
         pygame.sprite.Sprite.__init__(self)
@@ -153,23 +147,6 @@ class Enemy(pygame.sprite.Sprite):
             if pygame.sprite.collide_rect(self, gr):
                 self.vspeed = -self.jump_speed
 
-
-class Finish(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("images/finish.png")
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-
-class Coin(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("images/coin.png")
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-
 sprites = pygame.sprite.Group()
 
 def Map():
@@ -185,30 +162,31 @@ def Map():
     
     for row in level:
         for i in row:
-            if i == "P":
-                player = Player(x, y)
-                players.append(player)
-                sprites.add(player)
-            elif i == "G":
-                ground = Ground(x, y)
-                grounds.append(ground)
-                sprites.add(ground)
-            elif i == "E":
-                enemy = Enemy(x, y, 0, 0)
-                enemies.append(enemy)
-                sprites.add(enemy)
-            elif i == "J":
-                enemy = Enemy(x, y, 7, 0.5)
-                enemies.append(enemy)
-                sprites.add(enemy)
-            elif i == "F":
-                finish = Finish(x, y)
-                finishes.append(finish)
-                sprites.add(finish)
-            elif i == "M":
-                coin = Coin(x, y)
-                coins.append(coin)
-                sprites.add(coin)
+            match i:
+                case "P":
+                    player = Player(x, y)
+                    players.append(player)
+                    sprites.add(player)
+                case "G":
+                    ground = Ground(x, y)
+                    grounds.append(ground)
+                    sprites.add(ground)
+                case "E":
+                    enemy = Enemy(x, y, 0, 0)
+                    enemies.append(enemy)
+                    sprites.add(enemy)
+                case "J":
+                    enemy = Enemy(x, y, 7, 0.5)
+                    enemies.append(enemy)
+                    sprites.add(enemy)
+                case "F":
+                    finish = Finish(x, y)
+                    finishes.append(finish)
+                    sprites.add(finish)
+                case "M":
+                    coin = Coin(x, y)
+                    coins.append(coin)
+                    sprites.add(coin)
             x += 32
         x = 0
         y += 32
